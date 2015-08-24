@@ -62,10 +62,14 @@ class GemcPropertyMap extends LinkedHashMap<String,String> {
     /**
      * returns the length of the strings stored in this map
      **/
-    List<Integer> getWidths() {
+    List<Integer> getWidths(int minimum) {
         List<Integer> w = new ArrayList<Integer>();
         for (Map.Entry<String,String> e : this.entrySet()) {
-            w.add(e.getValue().length());
+            int l = e.getValue().length();
+            if (l < minimum) {
+                l = minimum;
+            }
+            w.add(l);
         }
         return w;
     }

@@ -23,7 +23,7 @@ public class GemcPropertyMaps extends HashMap<String,GemcPropertyMap> {
     public String toPaddedString(String sep) {
         List<Integer> pads = null;
         for (Map.Entry<String,GemcPropertyMap> vol : this.entrySet()) {
-            List<Integer> w = vol.getValue().getWidths();
+            List<Integer> w = vol.getValue().getWidths(1);
             if (pads == null) {
                 pads = w;
             } else {
