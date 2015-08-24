@@ -45,7 +45,7 @@ class GemcPropertyMap extends LinkedHashMap<String,String> {
     /**
      * text format expected by GEMC
      **/
-    public String toPaddedString(List<Integer> pads, String sep) {
+    String toPaddedString(List<Integer> pads, String sep) {
         StringBuilder msg = new StringBuilder();
         int i = 0;
         Iterator<Map.Entry<String, String>> itr = this.entrySet().iterator();

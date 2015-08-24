@@ -12,7 +12,7 @@ public class TestRunner {
         core.addListener(new TestRunListener());
         Result res = core.run(
            GemcPropertyMapTest.class,
-           //GemcPropertyMapsTest.class,
+           GemcPropertyMapsTest.class,
            GemcDetectorTest.class
         );
         if (res.wasSuccessful()) {
