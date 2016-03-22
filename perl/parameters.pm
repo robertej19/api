@@ -5,7 +5,7 @@ use lib ("$ENV{GEMC}/io");
 use utils;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(upload_parameters print_parameters get_parameters);
+@EXPORT = qw(upload_parameters print_parameters get_parameters get_volumes);
 
 
 # Utility to upload the parameters from the file "parameters.txt"
@@ -147,4 +147,50 @@ sub get_parameters
 	return %parameters;
 }
 
+# Utility to get a hash map with the volumes
+sub get_volumes
+{
+	my (%configuration) = @_;
+	my $varia = $configuration{"variation"};
+	my %mothers = ();
+	my %positions = ();
+	my %rotations = ();
+	my %types = ();
+	my %dimensions = ();
+	my %ids= ();
+	
+	# Text Factory. The volumes file is assumed to be present
+	# and named "volumes.txt"
+	my  $file = $configuration{"detector_name"}."__volumes_".$varia.".txt";
+	open(FILE, $file) or die("Open failed on file $file: $!");
+	my @lines = <FILE>;
+	close(FILE);
+ 	foreach my $line (@lines)
+	{
+		my @vvalues = split('[|]+',$line);
+
+		$vnam = trim($vvalues[0]);
+		$mothers{$vnam} = trim($vvalues[1]);
+		$positions{$vnam} = trim($vvalues[2]);
+		$rotations{$vnam} = trim($vvalues[3]);
+		$types{$vnam} = trim($vvalues[4]);
+		$dimensions{$vnam} = trim($vvalues[5]);
+		$ids{$vnam} = trim($vvalues[6]);
+	}
+
+	if($configuration{"verbosity"} > 0)
+	{
+		foreach my $key ( keys %dimensions)
+		{
+			print " * Parameter \"$key\" loaded with dimenstions: $mothers{$key} \n";
+			print " * Parameter \"$key\" loaded with dimenstions: $positions{$key} \n";
+			print " * Parameter \"$key\" loaded with dimenstions: $rotations{$key} \n";
+			print " * Parameter \"$key\" loaded with dimenstions: $types{$key} \n";
+			print " * Parameter \"$key\" loaded with dimenstions: $dimensions{$key} \n";
+		}
+	}
+
+	print "\n";
+	return (\%mothers, \%positions, \%rotations, \%types, \%dimensions, \%ids);
+}
 
