@@ -147,11 +147,14 @@ sub get_parameters
 	return %parameters;
 }
 
-# Utility to get a hash map with the volumes
+# Utility to get a hash maps with the volumes
+# Subroutine to read txt file with volumes from COATJAVA FTOF factory
 sub get_volumes
 {
 	my (%configuration) = @_;
 	my $varia = $configuration{"variation"};
+
+	# Hash maps to populate from volumes files
 	my %mothers = ();
 	my %positions = ();
 	my %rotations = ();
@@ -161,14 +164,16 @@ sub get_volumes
 	
 	# Text Factory. The volumes file is assumed to be present
 	# and named "volumes.txt"
+	# If it is not present run COATJAVA Detector Factory to create it
 	my  $file = $configuration{"detector_name"}."__volumes_".$varia.".txt";
-	open(FILE, $file) or die("Open failed on file $file: $!");
+	open(FILE, $file) or die("Open failed on file $file: $! (Run factory.groovy to create this file)");
 	my @lines = <FILE>;
 	close(FILE);
  	foreach my $line (@lines)
 	{
 		my @vvalues = split('[|]+',$line);
 
+		# Assign fields to corresponding hash maps
 		$vnam = trim($vvalues[0]);
 		$mothers{$vnam} = trim($vvalues[1]);
 		$positions{$vnam} = trim($vvalues[2]);
