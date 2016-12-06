@@ -99,6 +99,7 @@ sub init_mir
 	$mir{"specularlobe"}       = "none";
 	$mir{"specularspike"}      = "none";
 	$mir{"backscatter"}        = "none";
+	$mir{"sigmaAlhpa"}         = "-1";
 
 
 	return %mir;
@@ -136,6 +137,7 @@ sub print_mir
 	my $lspecularlobe      = trim($mirs{"specularlobe"});
 	my $lspecularspike     = trim($mirs{"specularspike"});
 	my $lbackscatter       = trim($mirs{"backscatter"});
+	my $lsigmaAlhpa        = trim($mirs{"sigmaAlhpa"});
 
 	if($lmatOptProps eq "notDefined")
 	{
@@ -167,10 +169,10 @@ sub print_mir
 		printf INFO ("%20s  |",  $lname);
 		printf INFO ("%30s  |",  $ldesc);
 		
-		if($ltype         eq "mustBeDefined") { print "Error: type undefined.\n"; }
-		if($lfinish       eq "mustBeDefined") { print "Error: finish undefined.\n"; }
-		if($lmodel        eq "mustBeDefined") { print "Error: model undefined.\n"; }
-		if($lborder       eq "mustBeDefined") { print "Error: border undefined.\n"; }
+		if($ltype    eq "mustBeDefined") { print "Error: type undefined.\n"; }
+		if($lfinish  eq "mustBeDefined") { print "Error: finish undefined.\n"; }
+		if($lmodel   eq "mustBeDefined") { print "Error: model undefined.\n"; }
+		if($lborder  eq "mustBeDefined") { print "Error: border undefined.\n"; }
 
 		
 		printf INFO ("%24s  |", $ltype);
@@ -199,9 +201,12 @@ sub print_mir
 		if($lspecularspike eq "none")    {printf INFO ("%5s |", $lspecularspike);}
 		else                             {printf INFO ("%s  |", $lspecularspike);}
 		# backscatter
-		if($lbackscatter eq "none")      {printf INFO ("%5s\n", $lbackscatter);}
-		else                             {printf INFO ("%s \n", $lbackscatter);}
-		
+		if($lbackscatter eq "none")      {printf INFO ("%5s |", $lbackscatter);}
+		else                             {printf INFO ("%s  |", $lbackscatter);}
+		# sigmaAlhpa
+		if($lsigmaAlhpa eq "-1")         {printf INFO ("%5s\n", $lsigmaAlhpa);}
+		else                             {printf INFO ("%s \n", $lsigmaAlhpa);}
+
 		
 		close(INFO);
 	}

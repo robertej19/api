@@ -4,7 +4,7 @@ require Exporter;
 
 # This could be installed with:
 # sudo cpan install DBD::mysql
-require DBD::mysql;
+# require DBD::mysql;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(cnumber trim trimall infos part load_configuration open_db get_last_id fstr arrayToString);
@@ -37,7 +37,7 @@ sub trim
 	my $string = shift;
 	if($string eq "")
 	{
-		print " Attention: trying to trim un-initialized string \n";
+		print " Attention: trying to trim un-initialized string in >".$string."<\n" ;
 		return "";
 	}
 	$string =~ s/^\s+//;

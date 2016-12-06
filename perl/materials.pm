@@ -37,7 +37,8 @@ sub init_mat
 	$mat{"slowtimeconstant"}   = "-1";
 	$mat{"yieldratio"}         = "-1";
 	$mat{"rayleigh"}           = "none";
-	
+	$mat{"birkConstant"}       = "-1";
+
 	return %mat;
 }
 
@@ -73,8 +74,9 @@ sub print_mat
 	my $lslowtimeconstant   = trim($mats{"slowtimeconstant"});
 	my $lyieldratio         = trim($mats{"yieldratio"});
 	my $lrayleigh           = trim($mats{"rayleigh"});
+	my $lbirkConstant       = trim($mats{"birkConstant"});
 
-	# after 5.10 once can use "state" to use a static variable`
+	# after perl 5.10 once can use "state" to use a static variable`
 	state $counter = 0;
 	state $this_variation = "";
 	
@@ -112,8 +114,9 @@ sub print_mat
 			printf INFO ("%5s  |",  $lresolutionscale);
 			printf INFO ("%5s  |",  $lfasttimeconstant);
 			printf INFO ("%5s  |",  $lslowtimeconstant);
-			printf INFO ("%5s  |", $lyieldratio);
-			printf INFO ("%5s  \n", $lrayleigh);
+			printf INFO ("%5s  |",  $lyieldratio);
+			printf INFO ("%5s  |",  $lrayleigh);
+			printf INFO ("%5s  \n", $lbirkConstant);
 
 		}
 		else
@@ -142,25 +145,26 @@ sub print_mat
 			if($lslowcomponent eq "none")      {	printf INFO ("%5s |", $lslowcomponent);}
 			else                               {	printf INFO ("%s  |", $lslowcomponent);}
 			# scintillation yield (constant)
-			if($lscintillationyield eq "none") {	printf INFO ("%5s |", $lscintillationyield);}
+			if($lscintillationyield eq "-1")   {	printf INFO ("%5s |", $lscintillationyield);}
 			else                               {	printf INFO ("%s  |", $lscintillationyield);}
 			# resolution scale (constant)
-			if($lresolutionscale eq "none")    {	printf INFO ("%5s |", $lresolutionscale);}
+			if($lresolutionscale eq "-1")      {	printf INFO ("%5s |", $lresolutionscale);}
 			else                               {	printf INFO ("%s  |", $lresolutionscale);}
 			# fast time (constant)
-			if($lfasttimeconstant eq "none")   {	printf INFO ("%5s |", $lfasttimeconstant);}
+			if($lfasttimeconstant eq "-1")     {	printf INFO ("%5s |", $lfasttimeconstant);}
 			else                               {	printf INFO ("%s  |", $lfasttimeconstant);}
 			# slow time (constant)
-			if($lslowtimeconstant eq "none")   {	printf INFO ("%5s |", $lslowtimeconstant);}
+			if($lslowtimeconstant eq "-1")     {	printf INFO ("%5s |", $lslowtimeconstant);}
 			else                               {	printf INFO ("%s  |", $lslowtimeconstant);}
 			# ratio of yield to total yield for slow component (constant)
-			if($lyieldratio eq "none")         {	printf INFO ("%5s |", $lyieldratio);}
+			if($lyieldratio eq "-1")           {	printf INFO ("%5s |", $lyieldratio);}
 			else                               {	printf INFO ("%s  |", $lyieldratio);}
 			# rayleigh scattering
-			if($lrayleigh eq "none")           {	printf INFO ("%5s\n", $lrayleigh);}
-			else                               {	printf INFO ("%s \n", $lrayleigh);}
-
-		
+			if($lrayleigh eq "none")           {	printf INFO ("%5s |", $lrayleigh);}
+			else                               {	printf INFO ("%s  |", $lrayleigh);}
+			# Birk constant
+			if($lbirkConstant eq "-1")         {	printf INFO ("%5s\n", $lbirkConstant);}
+			else                               {	printf INFO ("%s \n", $lbirkConstant);}
 		}
 		
 		close(INFO);
@@ -173,12 +177,12 @@ sub print_mat
 		my $dbh = open_db(%configuration);
 		
 		$dbh->do("insert into $table( \
-			          name,     description,     density,    ncomponents,    components,    photonEnergy,    indexOfRefraction,    absorptionLength,    reflectivity,   efficiency,   fastcomponent,   slowcomponent,   scintillationyield,   resolutionscale,   fasttimeconstant,   slowtimeconstant,   yieldratio,  rayleigh,   variation) \
-			values(      ?,               ?,           ?,              ?,             ?,               ?,                    ?,                   ?,               ?,            ?,               ?,               ?,                    ?,                 ?,                  ?,                  ?,            ?,         ?,           ?)   ON DUPLICATE KEY UPDATE \
-			        name=?,   description=?,   density=?,  ncomponents=?,  components=?,  photonEnergy=?,  indexOfRefraction=?,  absorptionLength=?,  reflectivity=?, efficiency=?, fastcomponent=?, slowcomponent=?, scintillationyield=?, resolutionscale=?, fasttimeconstant=?, slowtimeconstant=?, yieldratio=?,rayleigh=?, variation=?, \
+			          name,     description,     density,    ncomponents,    components,    photonEnergy,    indexOfRefraction,    absorptionLength,    reflectivity,   efficiency,   fastcomponent,   slowcomponent,   scintillationyield,   resolutionscale,   fasttimeconstant,   slowtimeconstant,   yieldratio,  rayleigh,   birkConstant,  variation) \
+			values(      ?,               ?,           ?,              ?,             ?,               ?,                    ?,                   ?,               ?,            ?,               ?,               ?,                    ?,                 ?,                  ?,                  ?,            ?,         ?,              ?,            ?)   ON DUPLICATE KEY UPDATE \
+			        name=?,   description=?,   density=?,  ncomponents=?,  components=?,  photonEnergy=?,  indexOfRefraction=?,  absorptionLength=?,  reflectivity=?, efficiency=?, fastcomponent=?, slowcomponent=?, scintillationyield=?, resolutionscale=?, fasttimeconstant=?, slowtimeconstant=?, yieldratio=?,rayleigh=?, birkConstant=?,  variation=?, \
 			        time=CURRENT_TIMESTAMP",  undef,
-			        $lname,          $ldesc,   $ldensity,  $lncomponents,  $lcomponents,  $lphotonEnergy,  $lindexOfRefraction,  $labsorptionLength,  $lreflectivity, $lefficiency, $lfastcomponent, $lslowcomponent, $lscintillationyield, $lresolutionscale, $lfasttimeconstant, $lslowtimeconstant, $lyieldratio, $lrayleigh, $varia,
-			        $lname,          $ldesc,   $ldensity,  $lncomponents,  $lcomponents,  $lphotonEnergy,  $lindexOfRefraction,  $labsorptionLength,  $lreflectivity, $lefficiency, $lfastcomponent, $lslowcomponent, $lscintillationyield, $lresolutionscale, $lfasttimeconstant, $lslowtimeconstant, $lyieldratio, $lrayleigh, $varia)
+			        $lname,          $ldesc,   $ldensity,  $lncomponents,  $lcomponents,  $lphotonEnergy,  $lindexOfRefraction,  $labsorptionLength,  $lreflectivity, $lefficiency, $lfastcomponent, $lslowcomponent, $lscintillationyield, $lresolutionscale, $lfasttimeconstant, $lslowtimeconstant, $lyieldratio, $lrayleigh, $lbirkConstant, $varia,
+			        $lname,          $ldesc,   $ldensity,  $lncomponents,  $lcomponents,  $lphotonEnergy,  $lindexOfRefraction,  $labsorptionLength,  $lreflectivity, $lefficiency, $lfastcomponent, $lslowcomponent, $lscintillationyield, $lresolutionscale, $lfasttimeconstant, $lslowtimeconstant, $lyieldratio, $lrayleigh, $lbirkConstant, $varia)
 			
 			or die "SQL Error: $DBI::errstr\n";
 		
