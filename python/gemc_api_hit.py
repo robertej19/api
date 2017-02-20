@@ -1,8 +1,6 @@
 #=======================================
 #	gemc hit definition
 #
-#	J. George, 2/19/2017
-#
 #	This file defines a MyHit class that holds values that describe a detector hit in gemc. The hit definition is used to
 #	include the effects of integration over a time window aw well as thresholds and signal propagation in readout electronics.
 #	The hit will be used with digitization systems that are currently compiled into gemc.  Eventually these will become a

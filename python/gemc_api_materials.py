@@ -1,8 +1,6 @@
 #=======================================
 #	gemc materials definition
 #
-#	J. George, 2/18/2017
-#
 #	This file defines a MyMaterials class that holds all the parameters needed to define a material in gemc or GEANT4.
 #	Any material in the project is an instance of this class.  The "print_mat" function writes out the material parameters to the
 #	materials definition text file that gemc takes as input

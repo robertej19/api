@@ -1,8 +1,6 @@
 #=======================================
 #	gemc hit definition
 #
-#	J. George, 2/19/2017
-#
 #	This file writes a bank variable to the bank text file.  This is used along with a digitization factory compiled into gemc.
 #	This part of the API was written to match the perl api function and does work with the ctof example.  It has not been
 #	well tested or documented at this point.

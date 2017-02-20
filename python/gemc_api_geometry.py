@@ -1,8 +1,6 @@
 #=======================================
 #	gemc geometry definition
 #
-#	J. George, 2/18/2017
-#
 #	This file defines a MyDetector class that holds all the parameters needed to define a physical volume in gemc or GEANT4.
 #	Any folume in the project is an instance of this class.  The "print_det" function writes out the volume parameters to the
 #	geometry definition text file that gemc takes as input.

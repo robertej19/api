@@ -1,8 +1,6 @@
 #=======================================
 #	gemc utils definition
 #
-#	J. George, 2/19/2017
-#
 #	This file defines a MyConfiguration class that holds the configuration options read in from the config.dat configuration file.
 #	Any folume in the project is an instance of this class.  The "print_det" function writes out the volume parameters to the
 #	geometry definition text file that gemc takes as input.

@@ -1,8 +1,6 @@
 #=======================================
 #	gemc parameters definition
 #
-#	J. George, 2/19/2017
-#
 #	This file defines a MyParameter class that holds values that can be input to gemc for use by the simulation.
 #	An example of a parameter might be the dimension of a detector element or the number of copies.  There are places
 #	in the structure to define where the parameter came from, say a CAD drawing or who the author is.

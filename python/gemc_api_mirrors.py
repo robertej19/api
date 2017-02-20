@@ -1,8 +1,6 @@
 #=======================================
 #	gemc mirrors definition
 #
-#	J. George, 2/19/2017
-#
 #	This file defines a MyMirror class that holds values to define an optical boundary.  In gemc, any type of optical boundary
 #	is described as a "mirror", regardless of its use or reflective quality.
 #
