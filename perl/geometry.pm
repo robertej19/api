@@ -1,7 +1,7 @@
 package geometry;
 require Exporter;
 
-use lib ("$ENV{GEMC}/io");
+#use lib ("$ENV{GEMC}/io");
 use utils;
 use 5.010;
 
@@ -9,27 +9,35 @@ use 5.010;
 @EXPORT = qw(print_det init_det);
 
 
-# Initialize hash maps
+# Initialize hash maps with default
 sub init_det
 {
 	my %detector = ();
 	
 	# These default value can be left off on the API
 	$detector{"description"} = "no description";
-	$detector{"pos"}         = "0 0 0";
-	$detector{"rotation"}    = "0 0 0";
-	$detector{"dimensions"}   = "0";
-	$detector{"color"}       = "999999";
-	$detector{"mfield"}      = "no";
-	$detector{"ncopy"}       = "1";
-	$detector{"pMany"}       = 1;
-	$detector{"exist"}       = 1;
+
+	$detector{"parameters"}   = "0";
+	
 	$detector{"visible"}     = 1;
 	$detector{"style"}       = 0;
-	$detector{"sensitivity"} = "no";
-	$detector{"hit_type"}    = "no";
-	$detector{"identifiers"} = "no";
+	$detector{"color"}       = "999999";
+
+	$detector{"emfield"}     = "no";
+
+	$detector{"pos"} = "0 0 0";
+	$detector{"rot"} = "0 0 0";
 	
+	$detector{"sensitivity"} = "no";
+	$detector{"touchableID"} = "no";
+
+	$detector{"copyOf"}     = "no";
+	$detector{"replicaOf"}  = "no";
+	$detector{"pCopyNo"}    = 0;
+	$detector{"solidsOpr"}  = "no";
+
+	$detector{"mirror"}     = "no";
+
 	return %detector;
 }
 
@@ -42,32 +50,37 @@ sub print_det
 	
 	my $table = $configuration{"detector_name"}."__geometry";
 	my $varia = $configuration{"variation"};
-	my $rmin  = $configuration{"rmin"};
-	my $rmax  = $configuration{"rmax"};
 	
-	# converting the hash maps in local variables
-	# (this is necessary to parse the MYSQL command)
+	# converting the hash maps in local variables - trimming leading and trainling spaces
 	
-	my $lname        = trim($det{"name"});
-	my $lmother      = trim($det{"mother"});
-	my $ldescription = trim($det{"description"});
-	my $lpos         = trim($det{"pos"});
-	my $lrotation    = trim($det{"rotation"});
-	my $lcolor       = trim($det{"color"});
-	my $ltype        = trim($det{"type"});
-	my $ldimensions  = trim($det{"dimensions"});
-	my $lmaterial    = trim($det{"material"});
-	my $lmfield      = trim($det{"mfield"});
-	my $lncopy       = trim($det{"ncopy"});
-	my $lpMany       = trim($det{"pMany"});
-	my $lexist       = trim($det{"exist"});
-	my $lvisible     = trim($det{"visible"});
-	my $lstyle       = trim($det{"style"});
-	my $lsensitivity = trim($det{"sensitivity"});
-	my $lhit_type    = trim($det{"hit_type"});
-	my $lidentifiers = trim($det{"identifiers"});
+	my $name        = trim($det{"name"});
+	my $mother      = trim($det{"mother"});
+	my $description = trim($det{"description"});
 	
-	# after 5.10 once can use "state" to use a static variable`
+	my $type        = trim($det{"type"});
+	my $parameters  = trim($det{"parameters"});
+	
+	my $visible     = trim($det{"visible"});
+	my $style       = trim($det{"style"});
+	my $color       = trim($det{"color"});
+
+	my $material    = trim($det{"material"});
+	my $emfield     = trim($det{"emfield"});
+
+	my $pos         = trim($det{"pos"});
+	my $rot         = trim($det{"rot"});
+	
+	my $sensitivity = trim($det{"sensitivity"});
+	my $touchableID = trim($det{"touchableID"});
+
+	my $copyOf       = trim($det{"copyOf"});
+	my $replicaOf    = trim($det{"replicaOf"});
+	my $pCopyNo      = trim($det{"pCopyNo"});
+	my $solidsOpr    = trim($det{"solidsOpr"});
+	
+	my $mirror       = trim($det{"mirror"});
+
+	# "state" is a static variable`
 	state $counter = 0;
 	state $this_variation = "";
 	
@@ -84,52 +97,36 @@ sub print_det
 		}
 
 		open(INFO, ">>$file");
-		printf INFO ("%20s  |", $lname);
-		printf INFO ("%20s  |", $lmother);
-		printf INFO ("%30s  |", $ldescription);
-		printf INFO ("%50s  |", $lpos);
-		printf INFO ("%40s  |", $lrotation);
-		printf INFO ("%7s   |", $lcolor);
-		printf INFO ("%20s  |", $ltype);
-		printf INFO ("%60s  |", $ldimensions);
-		printf INFO ("%20s  |", $lmaterial);
-		printf INFO ("%20s  |", $lmfield);
-		printf INFO ("%6s   |", $lncopy);
-		printf INFO ("%6s   |", $lpMany);
-		printf INFO ("%6s   |", $lexist);
-		printf INFO ("%4s   |", $lvisible);
-		printf INFO ("%4s   |", $lstyle);
-		printf INFO ("%20s  |", $lsensitivity);
-		printf INFO ("%20s  |", $lhit_type);
-		printf INFO ("%40s \n", $lidentifiers);
+		printf INFO ("%20s  |", $name);
+		printf INFO ("%20s  |", $mother);
+		printf INFO ("%30s  |", $description);
+		
+		printf INFO ("%20s  |", $type);
+		printf INFO ("%60s  |", $parameters);
+
+		printf INFO ("%4s   |", $visible);
+		printf INFO ("%4s   |", $style);
+		printf INFO ("%7s   |", $color);
+		
+		printf INFO ("%20s  |", $material);
+		printf INFO ("%20s  |", $emfield);
+
+		printf INFO ("%50s  |", $pos);
+		printf INFO ("%40s  |", $rot);
+		
+		printf INFO ("%20s  |", $sensitivity);
+		printf INFO ("%40s  |", $touchableID);
+		
+		printf INFO ("%20s  |", $copyOf);
+		printf INFO ("%20s  |", $replicaOf);
+		printf INFO ("%6s   |", $pCopyNo);
+		printf INFO ("%30s  |", $solidsOpr);
+
+		printf INFO ("%20s   \n", $mirror);
+
 		close(INFO);
 	}
 	
-	# MYSQL Factory
-	if($configuration{"factory"} eq "MYSQL")
-	{
-		my $dbh = open_db(%configuration);
-		my $next_id = $configuration{"this_geo_id"};
-		
-		# after 5.10 once can use "state" to use a static variable`
-		if($counter == 0)
-		{
-			print "   > Last Geometry ID: ", $next_id;
-			print "\n \n";
-			$counter = 1;
-		}
-		
-		my $dbq = $dbh->do("insert into $table ( \
-				    name,   mother,   description,   pos,        rot,     col,   type,   dimensions,   material, magfield,   ncopy,   pMany,   exist,   visible,   style,   sensitivity,    hitType,      identity,   rmin,   rmax,   variation,      id) \
-			values(    ?,        ?,             ?,     ?,          ?,       ?,      ?,            ?,          ?,        ?,       ?,       ?,       ?,         ?,       ?,             ?,          ?,             ?,      ?,      ?,           ?,       ?)",  undef,
-			      $lname, $lmother, $ldescription, $lpos, $lrotation, $lcolor, $ltype, $ldimensions, $lmaterial, $lmfield, $lncopy, $lpMany, $lexist, $lvisible, $lstyle, $lsensitivity, $lhit_type, $lidentifiers,  $rmin,  $rmax,      $varia, $next_id);
-		
-		if($configuration{"verbosity"} > 0 && $dbq == 1)
-		{
-			print "  + Detector element $lname uploaded successfully for variation \"$varia\" rmin=$rmin  rmax=$rmax  \n";
-		}
-		$dbh->disconnect();
-	}
 	
 }
 
