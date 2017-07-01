@@ -10,9 +10,10 @@ sed s/dimensions/parameters/ $filename | grep -v "hit_type" > port1
 sed s/identifiers/touchableID/ port1 > port2
 sed s/mfield/emfield/ port2 > port3
 sed s/root/world/ port3 > port4
+sed s/rotation/rot/ port4 > port5
 
 # replacing geant4 volume definitions
-sed s/Box/G4Box/                       port4  > portx4
+sed s/Box/G4Box/                       port5  > portx4
 sed s/Parallelepiped/G4Para/           portx4 > portx5
 sed s/Sphere/G4Sphere/                 portx5 > portx6
 sed s/Ellipsoid/G4Ellipsoid/           portx6 > portx7
