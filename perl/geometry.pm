@@ -17,26 +17,26 @@ sub init_det
 	# These default value can be left off on the API
 	$detector{"description"} = "no description";
 
-	$detector{"parameters"}   = "0";
+	$detector{"parameters"}   = "na";
 	
 	$detector{"visible"}     = 1;
 	$detector{"style"}       = 0;
 	$detector{"color"}       = "999999";
 
-	$detector{"emfield"}     = "no";
+	$detector{"emfield"}     = "inherit";
 
-	$detector{"pos"} = "0 0 0";
-	$detector{"rot"} = "0 0 0";
+	$detector{"pos"} = "0*cm 0*cm 0*cm";
+	$detector{"rot"} = "0*deg 0*deg 0*deg";
 	
-	$detector{"sensitivity"} = "no";
-	$detector{"touchableID"} = "no";
+	$detector{"sensitivity"} = "na";
+	$detector{"touchableID"} = "na";
 
-	$detector{"copyOf"}     = "no";
-	$detector{"replicaOf"}  = "no";
+	$detector{"copyOf"}     = "na";
+	$detector{"replicaOf"}  = "na";
 	$detector{"pCopyNo"}    = 0;
-	$detector{"solidsOpr"}  = "no";
+	$detector{"solidsOpr"}  = "na";
 
-	$detector{"mirror"}     = "no";
+	$detector{"mirror"}     = "na";
 
 	return %detector;
 }
@@ -126,8 +126,6 @@ sub print_det
 
 		close(INFO);
 	}
-	
-	
 }
 
 
