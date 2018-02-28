@@ -39,6 +39,9 @@ sub print {
 		printf INFO (" rotation=\"%s\"", $det->{"rotation"});
 		if($det->{"sensitivity"} ne "no"){
 			printf INFO (" sensitivity=\"%s\"", $det->{"sensitivity"});
+			if($det->{"hitType"} ne "no"){
+				printf INFO (" hitType=\"%s\"", $det->{"hitType"});
+			}
 			printf INFO (" identifiers=\"%s\"", $det->{"identifiers"});
 		}
 		printf INFO (" />\n");
