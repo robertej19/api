@@ -1,27 +1,27 @@
-#=======================================
-#	gemc parameters definition
-#
-#	This file defines a MyParameter class that holds values that can be input to gemc for use by the simulation.
-#	An example of a parameter might be the dimension of a detector element or the number of copies.  There are places
-#	in the structure to define where the parameter came from, say a CAD drawing or who the author is.
-#
-#	Each parameter is the instance of the class. All of the instance variables are strings that default to "none".
-#	Any variable that will keep its default value can be ignored in the detector definition.  Only the name and value are really required
-#
-#	Class members (all members are text strings):
-#	name			- The name of the parameter
-#	value				- The value of the parameter
-#	units				- The units for the value
-#	description			-  A description of the parameter
-#	author			- The name of the author of the parameter
-#	author_email		- The email address for contacting the author of the parameter
-#	link				- A link to a drawing containing the parameter, for example, a CAD drawing
-#	drawing_varname	- The name of the parameter as it is used in the linked drawing
-#	drawing_author		- The name of the author of the linked drawing
+"""=======================================
+gemc parameters definition
 
+This file defines a MyParameter class that holds values that can be input to gemc for use by the simulation.
+An example of a parameter might be the dimension of a detector element or the number of copies.  There are places
+in the structure to define where the parameter came from, say a CAD drawing or who the author is.
+
+Each parameter is the instance of the class. All of the instance variables are strings that default to "none".
+Any variable that will keep its default value can be ignored in the detector definition.  Only the name and value are really required
+
+Class members (all members are text strings):
+name			        - The name of the parameter
+value				      - The value of the parameter
+units				      - The units for the value
+description	      - A description of the parameter
+author			      - The name of the author of the parameter
+author_email	    - The email address for contacting the author of the parameter
+link				      - A link to a drawing containing the parameter, for example, a CAD drawing
+drawing_varname	  - The name of the parameter as it is used in the linked drawing
+drawing_author		- The name of the author of the linked drawing
+"""
 # Parameter class definition
 class MyParameter():
-	def __init__(self, name="none", value="none", units="none", description="none", 
+	def __init__(self, name="none", value="none", units="none", description="none",
 	author="none", author_email="none", link="none", drawing_varname="none", drawing_author="none"):
 		self.name = name
 		self.value = value
@@ -34,15 +34,15 @@ class MyParameter():
 		self.drawing_author = drawing_author
 
 
-# Function to retrieve the list of parameters from the parameter text file.  The function returns a python dictionary (parameterDict) of
-# (key, value) pairs where 'key' is the parameter name and 'value' is the parameter value.  The full class structure of each parameter
-# is also stored in a list (parameterList) that is currently not returned.
+"""Function to retrieve the list of parameters from the parameter text file.  The function returns a python dictionary (parameterDict) of
+(key, value) pairs where 'key' is the parameter name and 'value' is the parameter value.  The full class structure of each parameter
+is also stored in a list (parameterList) that is currently not returned.
+"""
 def get_parameters(configuration):
 	parameterDict = {}
 	parameterList = []
-	
-	# Text Factory. The parameter file is assumed to be present
-	# and named "parameters.txt"
+
+	# Text Factory. The parameter file is assumed to be present and named "parameters.txt"
 	if configuration.factory == "TEXT":
 		fileName = configuration.detector_name + "__parameters_"+str(configuration.variation)+".txt"
 		with open(fileName, "r") as f:
@@ -62,7 +62,7 @@ def get_parameters(configuration):
 				param.drawing_author = aline[8]
 				parameterDict[param.name] = param.value
 				parameterList.append(param)
-	
+
 	if float(configuration.verbosity) > 0:
 		for key in parameterDict.keys():
 			print(" * Parameter \"%s\" loaded with value: %s \n" % (key, parameterDict[key]) )
@@ -81,4 +81,3 @@ def print_parameters(parameterList):
 		print("  - Variable name on the drawing: %s" % param.drawing_varname)
 		print("  - Drawing Author: %s" % param.drawing_author)
 		print("-----------------------------------------")
-
